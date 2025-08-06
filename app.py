@@ -63,7 +63,7 @@ Structure:
 
 Write in a friendly, persuasive, informative tone.
 """
-    model = genai.GenerativeModel("gemini-pro")
+    model = genai.GenerativeModel("models/gemini-pro")
     response = model.generate_content(prompt)
     return response.text
 
