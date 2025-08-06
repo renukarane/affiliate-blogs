@@ -3,11 +3,11 @@ import requests
 from bs4 import BeautifulSoup
 import google.generativeai as genai
 
-# ---- Config ----
-st.set_page_config(page_title="Blog Writer", layout="centered")
-st.title("🧠 Affiliate Blog Generator (Minimal Version)")
+# ---- CONFIG ----
+st.set_page_config(page_title="Affiliate Blog Writer", layout="centered")
+st.title("🧠 Affiliate Blog Generator (FREE Gemini API)")
 
-# ---- Gemini API Key ----
+# ✅ Load your Gemini API key from Streamlit secrets
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 
 # ---- Scrape Product Info ----
@@ -30,22 +30,19 @@ def get_product_info(url):
 # ---- Generate Blog using Gemini ----
 def generate_blog_html(title, description, url):
     prompt = f"""
-You are a professional blog writer.
+Write a short blog post (500-700 words) promoting this product:
 
-Write a 500-700 word HTML blog post about this product:
-- Title: {title}
+- Product: {title}
 - Description: {description}
 - Affiliate link: {url}
 
 Requirements:
-- Use <h2>, <p>, <ul>, <li>, <strong> etc.
-- Explain benefits of the product
-- Include a call-to-action with the affiliate link
-- Make it SEO-optimized and engaging
-- Write in friendly, trustworthy tone
+- Format the blog in HTML using <h2>, <p>, <ul>, etc.
+- Use friendly, helpful tone
+- Include a strong call-to-action with the affiliate link
+- Be SEO-friendly
 """
-
-    model = genai.GenerativeModel(model_name="models/gemini-pro")
+    model = genai.GenerativeModel("gemini-pro")
     response = model.generate_content(prompt)
     return response.text
 
@@ -54,7 +51,7 @@ url = st.text_input("Paste your product or affiliate URL:")
 
 if st.button("Generate Blog"):
     if not url:
-        st.warning("Please enter a product URL.")
+        st.warning("Please enter a URL.")
     else:
         title, desc = get_product_info(url)
         if not title:
